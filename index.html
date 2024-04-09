@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFlix</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    .container {
+      margin-top: 30px;
+    }
+
+    .movie-card {
+      background-color: #212121;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .movie-card img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .search-bar input {
+      background-color: #333;
+      border: 1px solid #666;
+      color: #fff;
+    }
+
+    .search-bar button {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1">MyFlix</span>
+      <form class="form-inline search-bar">
+        <label class="sr-only" for="searchInput">Search</label>
+        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row" id="movies-grid"></div>
+  </div>
+
+  <footer class="footer mt-auto py-3 bg-dark">
+    <div class="container text-center">
+      <span class="text-muted">© 2024 MyFlix</span>
+    </div>
+  </footer>
+
+  <script>
+    const API_KEY = "1a501fcb";
+
+    async function fetchMovies() {
+      const response = await fetch(`http://www.omdbapi.com/?s=ride&type=movie&apikey=${API_KEY}`);
+      const data = await response.json();
+      return data.Search;
+    }
+
+    async function displayMovies() {
+      const movies = await fetchMovies();
+      const moviesGrid = document.getElementById("movies-grid");
+
+      movies.forEach(movie => {
+        const movieCard = document.createElement("div");
+        movieCard.classList.add("col-md-3", "movie-card");
+
+        const movieTitle = document.createElement("h5");
+        movieTitle.textContent = movie.Title;
+
+        const movieYear = document.createElement("p");
+        movieYear.textContent = movie.Year;
+
+        const moviePoster = document.createElement("img");
+        moviePoster.src = movie.Poster;
+        moviePoster.alt = movie.Title;
+
+        movieCard.appendChild(moviePoster);
+        movieCard.appendChild(movieTitle);
+        movieCard.appendChild(movieYear);
+
+        moviesGrid.appendChild(movieCard);
+      });
+    }
+
+    displayMovies();
+  </script>
+
+</body>
+</html>
